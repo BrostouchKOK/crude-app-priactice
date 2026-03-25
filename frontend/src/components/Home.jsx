@@ -47,9 +47,9 @@ const Home = () => {
                   <td className="py-3 px-4">{d.phone}</td>
                   <td className="py-3 px-4">{d.email}</td>
                   <td className="py-3 px-4 text-center space-x-2">
-                    <button className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white px-3 py-1 rounded-lg">
+                    <Link to={`/update/${d.id}`} className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white px-3 py-1 rounded-lg">
                       Edit
-                    </button>
+                    </Link>
                     <button className="bg-red-500 cursor-pointer hover:bg-red-600 text-white px-3 py-1 rounded-lg">
                       Delete
                     </button>
