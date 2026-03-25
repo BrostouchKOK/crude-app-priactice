@@ -1,17 +1,29 @@
 import axios from "axios";
-import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get("http://localhost:8081/api/get-all-users")
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm("Are you sure to delete?");
+    if (!confirmDelete) return;
+
+    axios
+      .delete("http://localhost:8081/api/delete-user/" + id)
+      .then((res) => {
+        setData((prevData) => prevData.filter((user) => user.id !== id));
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
@@ -22,7 +34,10 @@ const Home = () => {
             User Management
           </h2>
 
-          <Link to={"/create"} className="flex items-center justify-center bg-green-500 cursor-pointer hover:bg-green-600 text-white px-3 rounded mb-2">
+          <Link
+            to={"/create"}
+            className="flex items-center justify-center bg-green-500 cursor-pointer hover:bg-green-600 text-white px-3 rounded mb-2"
+          >
             Add User +
           </Link>
         </div>
@@ -47,10 +62,16 @@ const Home = () => {
                   <td className="py-3 px-4">{d.phone}</td>
                   <td className="py-3 px-4">{d.email}</td>
                   <td className="py-3 px-4 text-center space-x-2">
-                    <Link to={`/update/${d.id}`} className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white px-3 py-1 rounded-lg">
+                    <Link
+                      to={`/update/${d.id}`}
+                      className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white px-3 py-1 rounded-lg"
+                    >
                       Edit
                     </Link>
-                    <button className="bg-red-500 cursor-pointer hover:bg-red-600 text-white px-3 py-1 rounded-lg">
+                    <button
+                      onClick={(e) => handleDelete(d.id)}
+                      className="bg-red-500 cursor-pointer hover:bg-red-600 text-white px-3 py-1 rounded-lg"
+                    >
                       Delete
                     </button>
                   </td>

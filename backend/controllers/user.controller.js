@@ -29,19 +29,27 @@ const updateUser = async (req, res) => {
   try {
     const sql = "UPDATE users SET `name`=?, `phone`=?, `email`=? WHERE `id`=?";
     const id = req.params.id;
-    const values = [
-        req.body.name,
-        req.body.phone,
-        req.body.email,
-    ]
+    const values = [req.body.name, req.body.phone, req.body.email];
 
-    db.query(sql, [...values,id], (err,data)=>{
-        if(err) return res.json(err)
-        return res.json("user updated")
-    })
+    db.query(sql, [...values, id], (err, data) => {
+      if (err) return res.json(err);
+      return res.json("user updated");
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-module.exports = { getAllUsers, createUser,updateUser };
+const deleteUser = async (req, res) => {
+  try {
+    const sql = "DELETE FROM users WHERE `id` = ?";
+    const id = req.params.id;
+    db.query(sql,[id], (err, data)=>{
+        if(err) return res.json(err);
+        return res.json("user deleted")
+    })
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = { getAllUsers, createUser, updateUser, deleteUser };
